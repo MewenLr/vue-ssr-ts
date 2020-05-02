@@ -1,0 +1,16 @@
+version: '3'
+services:
+  vue-ssr:
+    container_name: vue-ssr
+    image: node:lts-alpine
+    working_dir: /app
+    environment:
+      HOST: 0.0.0.0
+    volumes:
+      - ./:/app
+    ports:
+      - 8080:8080
+    command:
+      - /bin/sh
+      - '-c'
+      - 'npm i && npm run dev'
