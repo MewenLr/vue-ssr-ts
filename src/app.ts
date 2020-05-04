@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Meta from 'vue-meta'
 import { sync } from 'vuex-router-sync'
 
-import App from './Hello.vue'
+import App from './Test.vue'
 import createStore from './store'
 import createRouter from './router'
 

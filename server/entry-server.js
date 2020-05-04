@@ -1,11 +1,11 @@
-import createApp from '../src/app'
+import createApp from '../src/app.ts'
 
 export default (context) => new Promise((res, rej) => {
   const { app, router, store } = createApp()
 
   const meta = app.$meta()
 
-  router.push(context.url) // push current url to router
+  router.push(context.url)
 
   context.meta = meta
 
