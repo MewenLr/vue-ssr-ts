@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <h1>Test Component of {{ name }}</h1>
     <div>Number : {{ number }}</div>
     <button @click="decrement">

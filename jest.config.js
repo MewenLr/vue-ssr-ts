@@ -1,6 +1,7 @@
 module.exports = {
   moduleFileExtensions: [
     'js',
+    'ts',
     'vue',
   ],
   moduleNameMapper: {

@@ -1,10 +1,11 @@
 module.exports = {
+  root: true,
   env: {
-    'browser': true,
-    'es6': true,
-    'mocha': true,
+    // 'browser': true,
+    // 'es6': true,
+    // 'mocha': true,
     'node': true,
-    'jest': true,
+    // 'jest': true,
   },
   settings: {
     'import/resolver': {
@@ -14,27 +15,37 @@ module.exports = {
     },
   },
   extends: [
-    'airbnb-base',
+    // 'plugin:vue/essential',
+    // '@vue/airbnb',
+    // '@vue/typescript/recommended',
+
     'plugin:vue/strongly-recommended',
+    'airbnb-base',
     '@vue/typescript',
   ],
-  globals: {
-    'Atomics': 'readonly',
-    'SharedArrayBuffer': 'readonly',
-    'expect': true,
-  },
-  parser: 'vue-eslint-parser',
+
+  // globals: {
+  //   'Atomics': 'readonly',
+  //   'SharedArrayBuffer': 'readonly',
+  //   'expect': true,
+  // },
+  // parser: 'vue-eslint-parser',
+
   parserOptions: {
     'ecmaVersion': 2020,
-    'sourceType': 'module',
-    'parser': 'babel-eslint',
-    'project': './tsconfig.json',
-    'allowImportExportEverywhere': true,
-    'ecmaFeatures': { legacyDecorators: true },
+
+    // 'sourceType': 'module',
+    // 'parser': 'babel-eslint',
+    // 'project': './tsconfig.json',
+    // 'allowImportExportEverywhere': true,
+    // 'ecmaFeatures': { legacyDecorators: true },
+
   },
-  plugins: ['vue'],
+
+  // plugins: ['vue'],
+
   rules: {
-    'linebreak-style': 'off',
+    // 'linebreak-style': 'off',
     'no-return-assign': 'off',
     'semi': ['error', 'never'],
     'quotes': ['error', 'single'],
@@ -44,13 +55,21 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { 'devDependencies': true }],
     'no-param-reassign': ['error', {'props': true, 'ignorePropertyModificationsFor': ['state', 'ctx', 'context'] }]
   },
-  overrides: [{
-    files: ["src/**/*"],
-    parser: 'vue-eslint-parser',
-    parserOptions: { 'parser': '@typescript-eslint/parser' },
-    plugins: ['vue', '@typescript-eslint'],
-    rules: {
-      'import/extensions': ['error', { 'ts': 'never', 'vue': 'always' }],
+  overrides: [
+    {
+      files: ['*.ts'],
+      parser: 'vue-eslint-parser',
+      parserOptions: { 'parser': '@typescript-eslint/parser' },
+      plugins: ['vue', '@typescript-eslint'],
+      rules: {
+        'import/extensions': ['error', { 'ts': 'never', 'vue': 'always' }],
+      },
     },
-  }],
+    {
+      files: ['*.test.(j|t)s?'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };
