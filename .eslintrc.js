@@ -1,11 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    // 'browser': true,
-    // 'es6': true,
-    // 'mocha': true,
     'node': true,
-    // 'jest': true,
   },
   settings: {
     'import/resolver': {
@@ -15,37 +11,14 @@ module.exports = {
     },
   },
   extends: [
-    // 'plugin:vue/essential',
-    // '@vue/airbnb',
-    // '@vue/typescript/recommended',
-
     'plugin:vue/strongly-recommended',
     'airbnb-base',
     '@vue/typescript',
   ],
-
-  // globals: {
-  //   'Atomics': 'readonly',
-  //   'SharedArrayBuffer': 'readonly',
-  //   'expect': true,
-  // },
-  // parser: 'vue-eslint-parser',
-
   parserOptions: {
     'ecmaVersion': 2020,
-
-    // 'sourceType': 'module',
-    // 'parser': 'babel-eslint',
-    // 'project': './tsconfig.json',
-    // 'allowImportExportEverywhere': true,
-    // 'ecmaFeatures': { legacyDecorators: true },
-
   },
-
-  // plugins: ['vue'],
-
   rules: {
-    // 'linebreak-style': 'off',
     'no-return-assign': 'off',
     'semi': ['error', 'never'],
     'quotes': ['error', 'single'],

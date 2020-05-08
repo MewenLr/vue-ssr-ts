@@ -1,7 +1,8 @@
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import VueRouter from 'vue-router'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 
+// @ts-ignore
 import App from './app.vue'
 
 const localVue = createLocalVue()
@@ -11,9 +12,9 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 
 describe('[App]', () => {
-  let store
   let state
   let actions
+  let store: Store<any>
 
   beforeEach(() => {
     state = {

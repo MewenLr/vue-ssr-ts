@@ -1,12 +1,11 @@
 const path = require('path')
 const WebpackBar = require('webpackbar')
-const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 const htmlOpts = require('./plugins/html')
-const copyOpts = require('./plugins/copy')
 const loaders = require('./helpers/loaders')
 
 module.exports = {
@@ -22,9 +21,12 @@ module.exports = {
   plugins: [
     new WebpackBar(),
     new VueLoaderPlugin(),
-    new CopyPlugin(copyOpts),
     new HtmlPlugin(htmlOpts),
     new CaseSensitivePathsPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].bundle.[hash:8].css',
+      chunkFilename: 'css/[name].chunk.[hash:8].css',
+    }),
   ],
 
 }

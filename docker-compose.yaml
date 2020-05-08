@@ -1,16 +1,19 @@
 version: '3'
 services:
   vue-ssr:
+    build: .
     container_name: vue-ssr
-    image: node:lts-alpine
-    working_dir: /app
+    env_file:
+      - .env
+    tty: true
+    stdin_open: true
     environment:
       HOST: 0.0.0.0
     volumes:
       - ./:/app
     ports:
-      - 8080:8080
+      - ${DEV_PORT}:${APP_PORT}
     command:
       - /bin/sh
       - '-c'
-      - 'npm i && npm run dev'
+      - 'npm rebuild node-sass && npm run dev'
