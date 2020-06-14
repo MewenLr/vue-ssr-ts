@@ -2,6 +2,7 @@ const path = require('path')
 const merge = require('webpack-merge')
 const TerserPlugin = require('terser-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
@@ -22,6 +23,7 @@ const clientConfig = {
   devtool: false,
   plugins: [
     new VueSSRClientPlugin(),
+    ...(!env.analyze ? [new CleanWebpackPlugin()] : []),
     ...(env.analyze ? [new BundleAnalyzerPlugin()] : []),
   ],
   optimization: {

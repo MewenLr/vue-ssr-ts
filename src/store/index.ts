@@ -1,21 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Endpoints from '@/store/modules/endpoints'
 
 Vue.use(Vuex)
 
-export default () => new Vuex.Store({
+export default () => {
+  const store = new Vuex.Store({
+    state: () => ({}),
+    getters: {},
+    mutations: {},
+    actions: {},
+    modules: { Endpoints },
+  })
 
-  state: () => ({
-    stCount: 0,
-    stTestClient: 'State Test from Vuex Client',
-  }),
-
-  actions: {
-    actIncCount: ({ commit }) => commit('mutIncCount'),
-  },
-
-  mutations: {
-    mutIncCount: (state) => state.stCount += 1,
-  },
-
-})
+  return store
+}

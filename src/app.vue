@@ -1,48 +1,46 @@
 <template lang="pug">
   #app.app
-    img(src="@/assets/images/vue.png" height="50px" width="50px")
-    | Here in app component with stCount prefetch : {{ stCount }}
-    hello
-    p
-      router-link(to="/") Go to Home
-      router-link(to="/about") Go to About
+    o-header.app_header
+    .app_nav
+      router-link.app_nav_link(to="/") Go to Home
+      | &nbsp;|&nbsp;
+      router-link.app_nav_link(to="/about") Go to About
     router-view
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex'
-import Hello from '@/components/hello.vue'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import OHeader from '@/components/organisms/o-header/o-header.vue'
 
-export default {
+@Component({
   name: 'App',
   components: {
-    Hello,
+    OHeader
   },
-  computed: {
-    ...mapState({
-      stCount: (state) => state.stCount, // prefetch in server *
-      stTestClient: (state) => state.stTestClient, // fetch in browser
-    }),
-  },
-  serverPrefetch() { // * prefetch before rendering
-    return this.actIncCount()
-  },
-  mounted() {
-    // execute action if server error
-    // or allow DevServer to simulate serverPrefetch
-    if (!this.stCount) this.actIncCount()
-  },
-  methods: {
-    ...mapActions({
-      actIncCount: 'actIncCount',
-    }),
-  },
-}
+})
+
+export default class App extends Vue { }
 </script>
 
 <style lang="sass">
+@import './_main.sass'
+
 .app
-  background-color: lightblue
-  height: 200vh
-  width: 500px
+  width: 100vw
+  height: 100vh
+  background-color: $dim-white
+
+  &_nav
+    height: 30px
+    display: flex
+    color: $dim-white
+    align-items: center
+    justify-content: center
+    background-color: $stern-brown
+
+    &_link
+      color: $dim-white
+
+      &:hover
+        color: $sand-yellow
 </style>
