@@ -2,6 +2,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const env = require('./environments')
+const svgoOpts = require('../optimization/svgo')
 
 module.exports = [
 
@@ -143,6 +144,7 @@ module.exports = [
   },
   {
     test: /\.svg$/,
+    exclude: path.resolve(__dirname, '../..', 'src/assets/icons'),
     use: [
       {
         loader: 'file-loader',
@@ -184,6 +186,24 @@ module.exports = [
             },
           },
         },
+      },
+    ],
+  },
+
+  /* svg-icon */
+  {
+    test: /\.svg$/,
+    include: path.resolve(__dirname, '../..', 'src/assets/icons'),
+    use: [
+      {
+        loader: 'svg-sprite-loader',
+        options: {
+          symbolId: 'icon-[name]',
+        },
+      },
+      {
+        loader: 'svgo-loader',
+        options: svgoOpts,
       },
     ],
   },

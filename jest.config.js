@@ -1,4 +1,13 @@
 module.exports = {
+  // roots: [
+  // 'src',
+  // '<rootDir>',
+  // ],
+  // modulePaths: [
+  //   '<rootDir>',
+  // ],
+  moduleDirectories: ['node_modules', 'src'],
+
   // moduleFileExtensions: [
   //   'js',
   //   'ts',
@@ -22,16 +31,22 @@ module.exports = {
     // tell Jest to handle *.vue files
     'vue',
   ],
+
+  // testRegex: '.test.ts$',
   transform: {
     // process TypeScript files
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.(t|j)s$': 'ts-jest',
+    // '^.+\\.ts$': 'ts-jest',
     // process *.vue files with vue-jest
     '.*\\.(vue)$': 'vue-jest',
   },
   // support the same @ -> src alias mapping in source code
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    // '^@/(.*)$': '<rootDir>/src/$1',
+    // '^@/(.*)$': '<rootDir>/src/$1',
   },
+
   // serializer for snapshots
   // snapshotSerializers: [
   //   'jest-serializer-vue',
