@@ -26,9 +26,12 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.vue",
+    "src/**/*.vue"
   ],
   "exclude": [
     "node_modules"
   ],
+  "files": [
+    "src/vue.d.ts"
+  ]
 }

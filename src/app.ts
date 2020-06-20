@@ -5,8 +5,11 @@ import { sync } from 'vuex-router-sync'
 import App from './app.vue'
 import createStore from './store'
 import createRouter from './router'
+import svgIcon from './assets/scripts/modules/svg-icon'
 
 Vue.use(Meta)
+
+svgIcon()
 
 export default () => {
   const router = createRouter()

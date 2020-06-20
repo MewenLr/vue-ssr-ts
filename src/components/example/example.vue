@@ -4,7 +4,7 @@
       source="example.jpg"
       placeholder="placeholder.png"
     )
-    h1.example_title Example Component
+    a-title.example_title(tag="h1") Example Component
     p.example_prop {{ msg }}
     p.example_computed {{ compMsg }}
     p.example_state(:test-attribute="`${apiClick}`") {{ apiClick }}
@@ -17,10 +17,12 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios'
 import { namespace } from 'vuex-class'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { TUserExample } from '@/assets/scripts/contracts/types'
 import AImage from '@/components/atoms/a-image/a-image.vue'
+import ATitle from '@/components/atoms/a-title/a-title.vue'
 
 const endpoints = namespace('Endpoints')
 
@@ -28,6 +30,7 @@ const endpoints = namespace('Endpoints')
   name: 'Example',
   components: {
     AImage,
+    ATitle,
   },
 })
 
@@ -66,6 +69,11 @@ export default class Example extends Vue {
   // Methods
   public fullName(user: TUserExample): string {
     return `${user.name}-${user.age}`
+  }
+
+  public async fetchApi(): Promise<object> {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/comments', { params: { postId: 1 } })
+    return response
   }
 
 }

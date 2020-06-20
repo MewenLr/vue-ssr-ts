@@ -1,5 +1,4 @@
 <template lang="pug">
-  //- TODO: check component
   component.title(:is="tag")
     slot
 </template>
@@ -17,7 +16,6 @@ export default class ATitle extends Vue {
 
   @Prop({
     default: 'h1',
-    // TODO: check validator
     validator: (prop) => tagValidator.includes(prop),
   }) private tag!: string
 
