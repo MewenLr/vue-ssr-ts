@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex, { Store } from 'vuex'
 import mockAxios from '@/__mocks__/axios'
-import endpoints from '@/store/modules/endpoints'
+import flushPromises from 'flush-promises'
+import ModExample from '@/store/modules/mod-example'
 import Example from '@/components/example/example.vue'
 import config from '@/components/example/example.dataset'
 
@@ -20,18 +21,23 @@ describe('[Example]', () => {
 
     store = new Vuex.Store({
       modules: {
-        Endpoints: {
+        ModExample: {
           namespaced: true,
-          state: endpoints.state,
+          state: ModExample.state,
+          actions: ModExample.actions,
+          mutations: ModExample.mutations,
         },
       },
     })
+
+    jest.clearAllMocks()
+    mockAxios.get.mockResolvedValue({ data: undefined })
   })
 
   describe('Props', () => {
 
     it('should render props msg in .example_prop', () => {
-      const wrapper = shallowMount(Example, { propsData, store, localVue })
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
       const prop = wrapper.find('.example_prop')
       expect(prop.text()).toEqual(props.msg)
     })
@@ -39,43 +45,56 @@ describe('[Example]', () => {
 
   describe('States', () => {
 
-    it('should render state endpoints apiClick .example_state attributes', () => {
-      const wrapper = shallowMount(Example, { propsData, store, localVue })
+    it('should render stUrlExample in .example_state attributes', () => {
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
       const state = wrapper.find('.example_state')
-      expect(state.attributes('test-attribute')).toEqual(endpoints.state.apiClick)
+      expect(state.attributes('test-attribute')).toEqual(ModExample.state.stUrlExample)
       // use props() when Element is a Vue Component
-      // expect(state.props('test-attribute')).toEqual(endpoints.state.apiClick)
+      // expect(state.props('test-attribute')).toEqual(ModExample.state.stUrlExample)
     })
   })
 
   describe('Computed', () => {
 
     it('compMsg: should return concatenated props msg', () => {
-      // 'as any' required to test method and computed
       const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
       expect(wrapper.vm.compMsg).toEqual(`Computed ${props.msg.split(' ')[1]}`)
+    })
+  })
+
+  describe('Lifecyle', () => {
+
+    it('Mounted', async () => {
+      mockAxios.get.mockResolvedValue({ data: 'test' })
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
+      await flushPromises()
+      expect(wrapper.vm.comments).toEqual('test')
+      expect(mockAxios.get).toHaveBeenCalledTimes(1)
+      expect(mockAxios.get).toHaveBeenCalledWith('/comments', { params: { postId: 1 } })
     })
   })
 
   describe('Methods', () => {
 
     it('fullName: should return concatenated user name and age', () => {
-      // 'as any' required to test method and computed
       const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
       expect(wrapper.vm.fullName(data.user)).toEqual(`${data.user.name}-${data.user.age}`)
     })
 
-    it('fetchApi: should fetch api once and return data', async () => {
-      console.log(mockAxios.get)
-      mockAxios.get.mockImplementationOnce(() => Promise.resolve({ data: 3 }))
-      // 'as any' required to test method and computed
-      // const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
-      // const res = await wrapper.vm.fetchApi()
-      // expect(res).toEqual({ data: 3 })
-      expect(mockAxios.get).toHaveBeenCalledTimes(1)
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/comments', { params: { postId: 1 } },
-      )
+    it('fetchApi: should fetch api and return data', async () => {
+      mockAxios.get.mockResolvedValue({ data: 'test' })
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
+      const res = await wrapper.vm.fetchApi()
+      expect(res).toEqual({ data: 'test' })
+      expect(mockAxios.get).toHaveBeenCalledTimes(2) // once on mounted, once in test
+      expect(mockAxios.get).toHaveBeenCalledWith('/comments', { params: { postId: 1 } })
+    })
+
+    it('updateUrlExample: should mutate stUrlExample', () => {
+      const updatedUrl = 'https://updated-url.com'
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
+      wrapper.vm.updateUrlExample(updatedUrl)
+      expect(wrapper.vm.stUrlExample).toEqual(updatedUrl)
     })
   })
 })

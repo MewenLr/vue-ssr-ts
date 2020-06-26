@@ -1,5 +1,5 @@
 <template lang="pug">
-  .home.block
+  .home
     example(msg="Example message")
 </template>
 
@@ -19,7 +19,6 @@ export default class PHome extends Vue { }
 
 <style lang="sass">
 .home
-  height: 450px
   color: $stern-brown
   background-color: $sand-yellow
 </style>

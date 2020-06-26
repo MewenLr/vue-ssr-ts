@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
+import { lazyLoadDirective } from '@/scripts/directives'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { lazyLoadDirective } from '@/assets/scripts/directives'
 
 @Component({
   name: 'Piction',

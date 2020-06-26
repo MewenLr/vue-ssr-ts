@@ -46,6 +46,7 @@ module.exports = {
       parserOptions: { 'parser': '@typescript-eslint/parser' },
       plugins: ['vue', '@typescript-eslint'],
       rules: {
+        'no-return-await': 'error',
         'lines-between-class-members': 'off',
         '@typescript-eslint/no-inferrable-types': 'off',
         'no-param-reassign': ['error', {'props': false }],

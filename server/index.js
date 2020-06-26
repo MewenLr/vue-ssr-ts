@@ -9,9 +9,9 @@ const template = require('fs').readFileSync(path.resolve(__dirname, 'index.html'
 const serverBundle = require('../public/vue-ssr-server-bundle.json')
 const clientManifest = require('../public/vue-ssr-client-manifest.json')
 
-const { env } = process
 const server = new Koa()
 const router = new Router()
+const port = process.env.APP_PORT || 8080
 
 const renderer = createBundleRenderer(serverBundle, {
   template,
@@ -39,4 +39,4 @@ router.get('*', async (ctx) => {
 
 server.use(router.routes()).use(router.allowedMethods())
 
-server.listen(env.APP_PORT, () => console.info(`[info] Server is running on : http://localhost:${env.APP_PORT}/`))
+server.listen(port, () => console.info(`[info] Server is running on : http://localhost:${port}/`))

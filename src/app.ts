@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Meta from 'vue-meta'
 import { sync } from 'vuex-router-sync'
-
 import App from './app.vue'
 import createStore from './store'
 import createRouter from './router'
-import svgIcon from './assets/scripts/modules/svg-icon'
+import svgIcon from './scripts/modules/svg-icon'
 
 Vue.use(Meta)
 

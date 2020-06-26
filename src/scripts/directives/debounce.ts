@@ -1,9 +1,8 @@
 import { DirectiveOptions } from 'vue'
-import { TEventDirective } from '@/assets/scripts/contracts/types'
+import { TEventDirective } from '@/scripts/types'
 
 function debounceFunc(fn: Function, delay: number) {
-  let timeout: any
-  // let timeout: NodeJS.Timeout | undefined
+  let timeout: NodeJS.Timeout | number | undefined
 
   const debounced = function (this: Function, ...args: unknown[]) {
     const later = () => {
@@ -11,8 +10,7 @@ function debounceFunc(fn: Function, delay: number) {
       fn.apply(this, args)
     }
 
-    clearTimeout(timeout)
-    // clearTimeout(timeout as NodeJS.Timeout)
+    clearTimeout(timeout as NodeJS.Timeout)
     timeout = setTimeout(later, delay)
 
     if (!timeout) return fn.apply(this, args)

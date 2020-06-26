@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Endpoints from '@/store/modules/endpoints'
+import ModExample from '@/store/modules/mod-example'
 
 Vue.use(Vuex)
 
@@ -10,7 +10,9 @@ export default () => {
     getters: {},
     mutations: {},
     actions: {},
-    modules: { Endpoints },
+    modules: {
+      ModExample,
+    },
   })
 
   return store

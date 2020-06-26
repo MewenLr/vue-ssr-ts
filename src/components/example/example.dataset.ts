@@ -5,5 +5,7 @@ export default {
       age: '26',
     },
   },
-  props: { msg: 'example message' },
+  props: {
+    msg: 'example message',
+  },
 }

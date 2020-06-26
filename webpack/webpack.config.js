@@ -1,4 +1,5 @@
 const path = require('path')
+const Dotenv = require('dotenv-webpack')
 const WebpackBar = require('webpackbar')
 const HtmlPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
@@ -20,6 +21,7 @@ module.exports = {
   module: { rules: loaders },
 
   plugins: [
+    new Dotenv(),
     new WebpackBar(),
     new VueLoaderPlugin(),
     new HtmlPlugin(htmlOpts),

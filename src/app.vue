@@ -26,8 +26,6 @@ export default class App extends Vue { }
 @import './_main.sass'
 
 .app
-  width: 100vw
-  height: 100vh
   background-color: $dim-white
 
   &_nav
