@@ -15,6 +15,7 @@
     "postbuild": "rm ./public/index.html",
     "prod": "npm run build && npm run server",
     "server": "node ./server/index.js",
+    "storybook": "start-storybook",
     "test": "jest"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "@babel/core": "*",
     "@babel/plugin-syntax-dynamic-import": "*",
     "@babel/preset-env": "*",
+    "@storybook/vue": "*",
     "@types/jest": "*",
     "@types/webpack-env": "*",
     "@typescript-eslint/eslint-plugin": "*",
@@ -46,6 +48,7 @@
     "babel-eslint": "*",
     "babel-jest": "*",
     "babel-loader": "*",
+    "babel-preset-vue": "*",
     "cache-loader": "*",
     "case-sensitive-paths-webpack-plugin": "*",
     "clean-webpack-plugin": "*",
