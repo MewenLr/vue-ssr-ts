@@ -1,5 +1,8 @@
 <template lang="pug">
-  .image(v-lazy-load="!!placeholder")
+  .image(
+    v-lazy-load="!!placeholder"
+    :key="source"
+  )
     img.image_placeholder(
       v-if="placeholder"
       :src="compPlaceholder"
@@ -45,6 +48,7 @@ export default class Piction extends Vue {
   &_placeholder, &_picture
     width: inherit
     height: inherit
+    object-fit: cover
 
   &_placeholder
     z-index: 0
