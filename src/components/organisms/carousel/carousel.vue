@@ -5,7 +5,7 @@
     v-drag-move="doDrag"
     v-click-down="startDrag"
   )
-    slider.carousel_slider(
+    carousel-slider.carousel_slider(
       ref="carouselSlider"
       @count-slides="countSlides"
     )
@@ -21,25 +21,29 @@
         v-click-down="goTo.bind(null, 1)"
         @keydown.enter="goTo(1, $event)"
       ) >
-    .carousel_pagination
-      button.carousel_pagination_btn(
-        v-for="n in nbSlides"
-        :aria-label="`Slide ${n}`"
-        :class="{'carousel_pagination_btn--active': (n - 1) === (paginationPosition - nbSlides)}"
-        v-click-down="goTo.bind(null, n + nbSlides - 1)"
-        @keydown.enter="goTo(n + nbSlides - 1, $event)"
-      )
+    carousel-pagination(
+      ref="carouselPagination"
+      :nbSlides="nbSlides"
+      :position="position"
+      :mode="paginationMode"
+      v-if="hasPagination"
+      @select-slide="goTo"
+    )
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import Slider from './slider.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import directives from './directives-carousel'
+import CarouselSlider from './carousel-slider.vue'
+import CarouselPagination from './carousel-pagination.vue'
+
+const paginationValidator = ['dash', 'dot', 'none']
 
 @Component({
   name: 'Carousel',
   components: {
-    Slider,
+    CarouselSlider,
+    CarouselPagination,
   },
   directives: {
     'drag-up': directives.dragUp,
@@ -51,9 +55,16 @@ import directives from './directives-carousel'
 export default class Carousel extends Vue {
 
   $refs!: {
-    carouselSlider: Vue;
     carousel: HTMLElement;
+    carouselSlider: CarouselSlider;
+    carouselPagination: CarouselPagination;
   }
+
+  @Prop({ default: false }) private isCross!: boolean
+  @Prop({
+    default: 'dot',
+    validator: (prop) => paginationValidator.includes(prop)
+  }) private paginationMode!: string
 
   private delta = 0
   private nbSlides = 0
@@ -64,9 +75,27 @@ export default class Carousel extends Vue {
   private paginationPosition = 0
   private startPoint: number | undefined = undefined
 
+  get hasPagination(): boolean {
+    return !!this.nbSlides && this.paginationMode !== 'none'
+  }
+
   mounted() {
+    this.setSlideSize()
     this.defaultPosition()
+    window.addEventListener('resize', () => this.setSlideSize())
     this.paginationPosition = this.nbSlides
+  }
+
+  destroyed() {
+    window.removeEventListener('resize', () => this.setSlideSize())
+  }
+
+  public setSlideSize(): void {
+    this.$refs.carouselSlider.$el.querySelectorAll('.carousel-slide').forEach(slide => {
+      const slideElement = slide as HTMLStyleElement
+      slideElement.style.width = `${this.$refs.carousel.offsetWidth * (this.isCross ? .8 : 1)}px`
+      if (this.isCross) slideElement.style.padding = `0 ${this.$refs.carousel.offsetWidth * .025}px`
+    })
   }
 
   public countSlides(payload: number): void {
@@ -75,13 +104,13 @@ export default class Carousel extends Vue {
 
   public defaultPosition(): void {
     this.position = this.nbSlides
-    this.positionSlider(false)
+    this.moveSlider(false)
   }
 
-  public positionSlider(animated = true): void {
+  public moveSlider(animated = true): void {
     const el = this.$refs.carouselSlider.$el as HTMLElement
     if (animated) this.animateSlider()
-    el.style.transform = `translateX(-${this.position * 100}%)`
+    el.style.transform = `translateX(-${this.position * (this.isCross ? 85 : 100)}%)`
   }
 
   public animateSlider(): void {
@@ -95,20 +124,14 @@ export default class Carousel extends Vue {
     }, this.animationDelay)
   }
 
-  public positionPagination(): void {
-    if (this.position >= (this.nbSlides * 2) || this.position === 0) this.paginationPosition = this.nbSlides
-    else if (this.position < this.nbSlides) this.paginationPosition = this.position + this.nbSlides
-    else this.paginationPosition = this.position
-  }
-
   public goTo(index: number, event: MouseEvent | TouchEvent): void {
     event.preventDefault()
     if (!this.animationOn) {
       if (index === 1) this.position += 1
       else if (index === -1) this.position -= 1
       else this.position = index
-      this.positionSlider()
-      this.positionPagination()
+      this.moveSlider()
+      this.$refs.carouselPagination.movePagination()
     }
   }
 
@@ -126,19 +149,20 @@ export default class Carousel extends Vue {
       const clientx = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
       this.delta = ((clientx - this.startPoint) / this.$refs.carousel.offsetWidth) * 100 * -1
       const el = this.$refs.carouselSlider.$el as HTMLElement
-      el.style.transform = `translateX(-${this.delta + (this.position * 100)}%)`
+      el.style.transform = `translateX(-${this.delta + (this.position * (this.isCross ? 85 : 100))}%)`
     }
   }
 
   public stopDrag(event: MouseEvent | TouchEvent): void {
     if (this.dragOn) {
+      // TODO: still errors end position, after resize and drag event
       const roundDelta = Math.round(this.delta / 100)
       const btwZeroAndTen = this.delta > -10 && this.delta < 0 || this.delta > 0 && this.delta < 10
       if (this.delta === 0) this.goTo(1, event)
       else if (btwZeroAndTen) this.goTo(this.position, event)
       else if (this.delta >= 10 && roundDelta < 2) this.goTo(1, event)
       else if (this.delta <= -10 && roundDelta > -2) this.goTo(-1, event)
-      else this.goTo(Math.round(this.delta / 100) + this.position, event)
+      else this.goTo(roundDelta + this.position, event)
       this.delta = 0
       this.dragOn = false
       this.startPoint = undefined
@@ -182,25 +206,4 @@ export default class Carousel extends Vue {
       cursor: pointer
       font-size: 20px
       background-color: rgba(black, 0.8)
-
-  &_pagination
-    width: 100%
-    bottom: 5px
-    z-index: 100
-    display: flex
-    position: absolute
-    justify-content: center
-
-    &_btn
-      padding: 0
-      width: 15px
-      height: 15px
-      margin: 0 5px
-      cursor: pointer
-      border-radius: 100%
-      border: 1px solid white
-      background-color: transparent
-
-      &--active
-        background-color: white
 </style>

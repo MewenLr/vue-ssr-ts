@@ -2,8 +2,10 @@
   .home
     //- example(msg="Example message")
 
-    carousel.home_carousel
-      slide.home_slide(
+    carousel.home_carousel(
+      :is-cross="true"
+    )
+      carousel-slide.home_slide(
         v-for="(img, i) in images"
         :key="i"
       )
@@ -17,16 +19,16 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Example from '@/components/example/example.vue'
 import AImage from '@/components/atoms/a-image/a-image.vue'
-import Slide from '@/components/organisms/carousel/slide.vue'
 import Carousel from '@/components/organisms/carousel/carousel.vue'
+import CarouselSlide from '@/components/organisms/carousel/carousel-slide.vue'
 
 @Component({
   name: 'PHome',
   components: {
     AImage,
-    Slide,
     Example,
     Carousel,
+    CarouselSlide,
   },
 })
 
@@ -50,8 +52,6 @@ export default class PHome extends Vue {
   background-color: $sand-yellow
 
   &_carousel
-    // width: 750px
-    width: 75vw
-    margin-left: 12.5vw
+    width: 100%
     height: 500px
 </style>

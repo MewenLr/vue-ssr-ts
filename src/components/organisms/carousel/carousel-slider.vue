@@ -68,19 +68,19 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
     after.push(clonedAfter)
   }
 
-  (context as Slider).nbSlides = slides.length
+  (context as CarouselSlider).nbSlides = slides.length
 
   return h('ul', { class: 'slider' }, [...before, ...slides, ...after])
 }
 
 @Component({
-  name: 'Slider',
+  name: 'CarouselSlider',
   render(h) {
     return renderSlides(h, this)
   },
 })
 
-export default class Slider extends Vue {
+export default class CarouselSlider extends Vue {
 
   public nbSlides = 0
 
