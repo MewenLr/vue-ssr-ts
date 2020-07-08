@@ -1,13 +1,14 @@
 <template lang="pug">
   .carousel-pagination(
-    :class=`{
-      'carousel-pagination--dot': mode === 'dot',
-      'carousel-pagination--dash': mode === 'dash',
-    }`
+    :class="`carousel-pagination--${mode}`"
   )
+    .carousel-pagination_fraction(
+      v-if="mode === 'fraction'"
+    ) {{ paginationPosition - nbSlides + 1 }} / {{ nbSlides }}
     button.carousel-pagination_btn(
       :aria-label="`Slide ${n}`"
       :class="{'carousel-pagination_btn--active': (n - 1) === (paginationPosition - nbSlides)}"
+      v-else
       v-for="n in nbSlides"
       v-click-down="selectSlide.bind(null, n + nbSlides - 1)"
       @keydown.enter="selectSlide(n + nbSlides - 1, $event)"
@@ -54,6 +55,7 @@ export default class CarouselPagination extends Vue {
 
 <style lang="sass">
 .carousel-pagination
+  $self: &
   width: 100%
   bottom: 5px
   z-index: 100
@@ -73,4 +75,11 @@ export default class CarouselPagination extends Vue {
 
     &--active
       background-color: white
+
+  &--dash
+
+    #{ $self }_btn
+      width: 25px
+      height: 8px
+      border-radius: 2px
 </style>

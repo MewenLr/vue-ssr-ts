@@ -25,7 +25,7 @@
       ref="carouselPagination"
       :nbSlides="nbSlides"
       :position="position"
-      :mode="paginationMode"
+      :mode="pagination"
       v-if="hasPagination"
       @select-slide="goTo"
     )
@@ -37,7 +37,7 @@ import directives from './directives-carousel'
 import CarouselSlider from './carousel-slider.vue'
 import CarouselPagination from './carousel-pagination.vue'
 
-const paginationValidator = ['dash', 'dot', 'none']
+const paginationValidator = ['dash', 'dot', 'fraction', 'none']
 
 @Component({
   name: 'Carousel',
@@ -64,7 +64,7 @@ export default class Carousel extends Vue {
   @Prop({
     default: 'dot',
     validator: (prop) => paginationValidator.includes(prop)
-  }) private paginationMode!: string
+  }) private pagination!: string
 
   private delta = 0
   private nbSlides = 0
@@ -76,7 +76,7 @@ export default class Carousel extends Vue {
   private startPoint: number | undefined = undefined
 
   get hasPagination(): boolean {
-    return !!this.nbSlides && this.paginationMode !== 'none'
+    return !!this.nbSlides && this.pagination !== 'none'
   }
 
   mounted() {

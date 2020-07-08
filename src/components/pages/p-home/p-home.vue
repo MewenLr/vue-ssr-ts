@@ -3,11 +3,13 @@
     //- example(msg="Example message")
 
     carousel.home_carousel(
-      :is-cross="true"
+      pagination="dash"
+      :is-cross="false"
+      v-if="slides.length"
     )
       carousel-slide.home_slide(
-        v-for="(img, i) in images"
         :key="i"
+        v-for="(img, i) in slides"
       )
         a-image(
           :source="img"
@@ -17,6 +19,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import axios from 'axios'
 import Example from '@/components/example/example.vue'
 import AImage from '@/components/atoms/a-image/a-image.vue'
 import Carousel from '@/components/organisms/carousel/carousel.vue'
@@ -34,12 +37,25 @@ import CarouselSlide from '@/components/organisms/carousel/carousel-slide.vue'
 
 export default class PHome extends Vue {
 
-  private images = [
-    'surf.jpg',
-    'mountain.jpg',
-    'greece.jpg',
-    'snow.jpg',
+  private slides: (string | undefined)[] = [
+    // 'surf.jpg',
+    // 'mountain.jpg',
+    // 'greece.jpg',
+    // 'snow.jpg',
   ]
+
+  async mounted() {
+    try {
+      const listImg = []
+      const img = await axios.get('https://source.unsplash.com/1600x900/?nature,water')
+      for(let i = 0; i < 4; i += 1) {
+        listImg.push(img.config.url)
+      }
+      this.slides = listImg
+    } catch(e) {
+      console.error(e)
+    }
+  }
 
 }
 </script>
