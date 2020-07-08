@@ -47,8 +47,8 @@ export default class PHome extends Vue {
   async mounted() {
     try {
       const listImg = []
-      const img = await axios.get('https://source.unsplash.com/1600x900/?nature,water')
       for(let i = 0; i < 4; i += 1) {
+        const img = await axios.get(`https://picsum.photos/id/2${i}/1200/600`)
         listImg.push(img.config.url)
       }
       this.slides = listImg

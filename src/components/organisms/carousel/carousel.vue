@@ -10,17 +10,9 @@
       @count-slides="countSlides"
     )
       slot
-    .carousel_nav
-      button.carousel_nav_previous(
-        aria-label="Previous Slide"
-        v-click-down="goTo.bind(null, -1)"
-        @keydown.enter="goTo(-1, $event)"
-      ) <
-      button.carousel_nav_next(
-        aria-label="Next Slide"
-        v-click-down="goTo.bind(null, 1)"
-        @keydown.enter="goTo(1, $event)"
-      ) >
+    carousel-navigation(
+      @change-slide="goTo"
+    )
     carousel-pagination(
       ref="carouselPagination"
       :nbSlides="nbSlides"
@@ -36,6 +28,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import directives from './directives-carousel'
 import CarouselSlider from './carousel-slider.vue'
 import CarouselPagination from './carousel-pagination.vue'
+import CarouselNavigation from './carousel-navigation.vue'
 
 const paginationValidator = ['dash', 'dot', 'fraction', 'none']
 
@@ -44,6 +37,7 @@ const paginationValidator = ['dash', 'dot', 'fraction', 'none']
   components: {
     CarouselSlider,
     CarouselPagination,
+    CarouselNavigation,
   },
   directives: {
     'drag-up': directives.dragUp,
@@ -155,7 +149,6 @@ export default class Carousel extends Vue {
 
   public stopDrag(event: MouseEvent | TouchEvent): void {
     if (this.dragOn) {
-      // TODO: still errors end position, after resize and drag event
       const roundDelta = Math.round(this.delta / 100)
       const btwZeroAndTen = this.delta > -10 && this.delta < 0 || this.delta > 0 && this.delta < 10
       if (this.delta === 0) this.goTo(1, event)
@@ -187,23 +180,4 @@ export default class Carousel extends Vue {
     display: flex
     width: inherit
     height: inherit
-
-  &_nav
-    top: 50%
-    width: 100%
-    z-index: 101
-    display: flex
-    position: absolute
-    transform: translateY(-50%)
-    justify-content: space-between
-
-    &_previous, &_next
-      padding: 0
-      width: 50px
-      height: 50px
-      border: none
-      color: white
-      cursor: pointer
-      font-size: 20px
-      background-color: rgba(black, 0.8)
 </style>

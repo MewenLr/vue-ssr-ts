@@ -14,6 +14,8 @@ module.exports = merge(baseWebpackConfig, {
     chunkFilename: 'js/[name].chunk.js',
   },
 
+  devtool: 'inline-source-map',
+
   devServer: {
     hot: true,
     quiet: true,

@@ -82,7 +82,7 @@ module.exports = [
         ? { loader: MiniCssExtractPlugin.loader }
         : { loader: 'vue-style-loader' },
       {
-        loader: 'css-loader', options: { sourceMap: false },
+        loader: 'css-loader', options: { sourceMap: true },
       },
     ],
   },
@@ -95,7 +95,7 @@ module.exports = [
         ? { loader: MiniCssExtractPlugin.loader }
         : { loader: 'vue-style-loader' },
       {
-        loader: 'css-loader', options: { sourceMap: false },
+        loader: 'css-loader', options: { sourceMap: true },
       },
       {
         loader: 'postcss-loader',
@@ -109,14 +109,14 @@ module.exports = [
       {
         loader: 'sass-loader',
         options: {
-          sourceMap: false,
+          sourceMap: true,
           sassOptions: { indentedSyntax: true },
         },
       },
       {
         loader: 'sass-resources-loader',
         options: {
-          sourceMap: false,
+          sourceMap: true,
           resources: path.resolve(__dirname, '../..', 'src/assets/styles/**/*.sass'),
         },
       },
