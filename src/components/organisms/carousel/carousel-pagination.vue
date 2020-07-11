@@ -1,9 +1,9 @@
 <template lang="pug">
   .carousel-pagination(
-    :class="`carousel-pagination--${mode}`"
+    :class="`carousel-pagination--${type}`"
   )
     .carousel-pagination_fraction(
-      v-if="mode === 'fraction'"
+      v-if="type === 'fraction'"
     ) {{ paginationPosition - nbSlides + 1 }} / {{ nbSlides }}
     button.carousel-pagination_btn(
       :aria-label="`Slide ${n}`"
@@ -28,7 +28,7 @@ import directives from './directives-carousel'
 
 export default class CarouselPagination extends Vue {
 
-  @Prop({ required: true }) private mode!: string
+  @Prop({ required: true }) private type!: string
   @Prop({ required: true }) private nbSlides!: number
   @Prop({ required: true }) private position!: number
 
@@ -44,7 +44,7 @@ export default class CarouselPagination extends Vue {
 
   public movePagination(): void {
     this.$nextTick(() => {
-      if (this.position >= (this.nbSlides * 2) || this.position === 0) this.paginationPosition = this.nbSlides
+      if (this.position >= (this.nbSlides * 2) || this.position === 0) this.paginationPosition = this.nbSlides
       else if (this.position < this.nbSlides) this.paginationPosition = this.position + this.nbSlides
       else this.paginationPosition = this.position
     })
@@ -57,10 +57,10 @@ export default class CarouselPagination extends Vue {
 .carousel-pagination
   $self: &
   width: 100%
-  bottom: 5px
+  height: 50px
   z-index: 100
   display: flex
-  position: absolute
+  align-items: center
   justify-content: center
 
   &_btn
@@ -70,11 +70,11 @@ export default class CarouselPagination extends Vue {
     margin: 0 5px
     cursor: pointer
     border-radius: 100%
-    border: 1px solid white
     background-color: transparent
+    border: 1px solid $stern-brown
 
     &--active
-      background-color: white
+      background-color: $stern-brown
 
   &--dash
 

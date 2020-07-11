@@ -1,9 +1,9 @@
 <template lang="pug">
   .header
     .header_btn
-      a-icon(icon-name="menu")
+      a-icon(icon="menu")
     .header_btn
-      a-icon(icon-name="user")
+      a-icon(icon="user")
 </template>
 
 <script lang="ts">

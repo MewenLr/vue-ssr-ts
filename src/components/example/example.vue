@@ -6,13 +6,13 @@
     )
     a-title.example_title(tag="h1") Example Component
     p.example_prop {{ msg }}
-    p.example_computed {{ compMsg }}
+    p.example_computed {{ compMsg }}
     p.example_state(:test-attribute="`${stUrlExample}`") {{stUrlExample }}
     .example_list(
       v-for="user in list"
       :key="user.name"
     )
-      | Name : {{ user.name }} | Age : {{ user.age }} |&nbsp;
+      | Name : {{ user.name }} | Age : {{ user.age }} |&nbsp;
       span.example_list_method Name and Age : {{ fullName(user) }}
     .example_comments(
       v-for="comment in comments"
@@ -74,7 +74,7 @@ export default class Example extends Vue {
     try {
       const { data } = await axGetComments({ params: { postId: 1 } })
       this.comments = data
-    } catch(e) {
+    } catch (e) {
       console.error(`[error] : ${e}`)
     }
   }

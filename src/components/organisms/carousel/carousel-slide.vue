@@ -17,6 +17,9 @@ export default class CarouselSlide extends Vue { }
 .carousel-slide
   left: 50%
   height: 100%
+  display: flex
   position: relative
+  align-items: center
+  justify-content: center
   transform: translateX(-50%)
 </style>

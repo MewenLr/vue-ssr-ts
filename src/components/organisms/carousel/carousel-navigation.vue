@@ -1,5 +1,7 @@
 <template lang="pug">
-  .carousel-navigation
+  .carousel-navigation(
+    :class="`carousel-navigation--${type}`"
+  )
     button.carousel-navigation_previous(
       aria-label="Previous Slide"
       v-click-down="changeSlide.bind(null, -1)"
@@ -13,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import directives from './directives-carousel'
 
 @Component({
@@ -24,6 +26,8 @@ import directives from './directives-carousel'
 })
 
 export default class CarouselNavigation extends Vue {
+
+  @Prop({ required: true }) private type!: string
 
   public changeSlide(direction: number, event: MouseEvent | TouchEvent): void {
     this.$emit('change-slide', direction, event)

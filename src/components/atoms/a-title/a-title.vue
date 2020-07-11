@@ -1,5 +1,8 @@
 <template lang="pug">
-  component.title(:is="tag")
+  component.title(
+    :is="tag"
+    :class="`title--${tag}`"
+  )
     slot
 </template>
 

@@ -1,9 +1,11 @@
 <template lang="pug">
   .carousel(
     ref="carousel"
+    :class="{'carousel--pagination': hasPagination}"
     v-drag-up="stopDrag"
     v-drag-move="doDrag"
     v-click-down="startDrag"
+    v-resize-carousel="setSlideSize"
   )
     carousel-slider.carousel_slider(
       ref="carouselSlider"
@@ -11,13 +13,15 @@
     )
       slot
     carousel-navigation(
+      :type="navigation"
+      v-if="hasNavigation"
       @change-slide="goTo"
     )
     carousel-pagination(
       ref="carouselPagination"
+      :type="pagination"
       :nbSlides="nbSlides"
       :position="position"
-      :mode="pagination"
       v-if="hasPagination"
       @select-slide="goTo"
     )
@@ -30,6 +34,7 @@ import CarouselSlider from './carousel-slider.vue'
 import CarouselPagination from './carousel-pagination.vue'
 import CarouselNavigation from './carousel-navigation.vue'
 
+const navigationValidator = ['arrow', 'none']
 const paginationValidator = ['dash', 'dot', 'fraction', 'none']
 
 @Component({
@@ -43,6 +48,7 @@ const paginationValidator = ['dash', 'dot', 'fraction', 'none']
     'drag-up': directives.dragUp,
     'drag-move': directives.dragMove,
     'click-down': directives.clickDown,
+    'resize-carousel': directives.resizeCarousel,
   },
 })
 
@@ -57,8 +63,12 @@ export default class Carousel extends Vue {
   @Prop({ default: false }) private isCross!: boolean
   @Prop({
     default: 'dot',
-    validator: (prop) => paginationValidator.includes(prop)
+    validator: (prop) => paginationValidator.includes(prop),
   }) private pagination!: string
+  @Prop({
+    default: 'arrow',
+    validator: (prop) => navigationValidator.includes(prop),
+  }) private navigation!: string
 
   private delta = 0
   private nbSlides = 0
@@ -73,22 +83,21 @@ export default class Carousel extends Vue {
     return !!this.nbSlides && this.pagination !== 'none'
   }
 
+  get hasNavigation(): boolean {
+    return !!this.nbSlides && this.navigation !== 'none'
+  }
+
   mounted() {
     this.setSlideSize()
     this.defaultPosition()
-    window.addEventListener('resize', () => this.setSlideSize())
     this.paginationPosition = this.nbSlides
   }
 
-  destroyed() {
-    window.removeEventListener('resize', () => this.setSlideSize())
-  }
-
   public setSlideSize(): void {
-    this.$refs.carouselSlider.$el.querySelectorAll('.carousel-slide').forEach(slide => {
+    this.$refs.carouselSlider.$el.querySelectorAll('.carousel-slide').forEach((slide) => {
       const slideElement = slide as HTMLStyleElement
-      slideElement.style.width = `${this.$refs.carousel.offsetWidth * (this.isCross ? .8 : 1)}px`
-      if (this.isCross) slideElement.style.padding = `0 ${this.$refs.carousel.offsetWidth * .025}px`
+      slideElement.style.minWidth = `${this.$refs.carousel.offsetWidth * (this.isCross ? 0.8 : 1)}px`
+      if (this.isCross) slideElement.style.padding = `0 ${this.$refs.carousel.offsetWidth * 0.025}px`
     })
   }
 
@@ -114,7 +123,7 @@ export default class Carousel extends Vue {
     setTimeout(() => {
       this.animationOn = false
       el.style.transition = ''
-      if (this.position >= (this.nbSlides * 2) || this.position <= 0) this.defaultPosition()
+      if (this.position >= (this.nbSlides * 2) || this.position <= 0) this.defaultPosition()
     }, this.animationDelay)
   }
 
@@ -133,14 +142,14 @@ export default class Carousel extends Vue {
     event.preventDefault()
     if (!this.animationOn) {
       this.dragOn = true
-      this.startPoint = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
+      this.startPoint = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
     }
   }
 
   public doDrag(event: MouseEvent | TouchEvent): void {
     event.preventDefault()
     if (this.dragOn && this.startPoint) {
-      const clientx = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
+      const clientx = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
       this.delta = ((clientx - this.startPoint) / this.$refs.carousel.offsetWidth) * 100 * -1
       const el = this.$refs.carouselSlider.$el as HTMLElement
       el.style.transform = `translateX(-${this.delta + (this.position * (this.isCross ? 85 : 100))}%)`
@@ -150,7 +159,7 @@ export default class Carousel extends Vue {
   public stopDrag(event: MouseEvent | TouchEvent): void {
     if (this.dragOn) {
       const roundDelta = Math.round(this.delta / 100)
-      const btwZeroAndTen = this.delta > -10 && this.delta < 0 || this.delta > 0 && this.delta < 10
+      const btwZeroAndTen = (this.delta > -10 && this.delta < 0) || (this.delta > 0 && this.delta < 10)
       if (this.delta === 0) this.goTo(1, event)
       else if (btwZeroAndTen) this.goTo(this.position, event)
       else if (this.delta >= 10 && roundDelta < 2) this.goTo(1, event)
@@ -167,8 +176,8 @@ export default class Carousel extends Vue {
 
 <style lang="sass">
 .carousel
-  width: inherit
-  height: inherit
+  width: 100%
+  height: 100%
   overflow: hidden
   user-select: none
   position: relative
@@ -177,7 +186,13 @@ export default class Carousel extends Vue {
   &_slider
     margin: 0
     padding: 0
+    width: 100%
+    height: 100%
     display: flex
-    width: inherit
-    height: inherit
+
+  &--pagination
+    padding-bottom: 50px
+
+    .carousel-navigation
+      top: calc(50% - 25px)
 </style>

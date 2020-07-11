@@ -4,7 +4,7 @@
 
     carousel.home_carousel(
       pagination="dash"
-      :is-cross="false"
+      :is-cross="true"
       v-if="slides.length"
     )
       carousel-slide.home_slide(
@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import axios from 'axios'
 import Example from '@/components/example/example.vue'
 import AImage from '@/components/atoms/a-image/a-image.vue'
 import Carousel from '@/components/organisms/carousel/carousel.vue'
@@ -38,31 +37,16 @@ import CarouselSlide from '@/components/organisms/carousel/carousel-slide.vue'
 export default class PHome extends Vue {
 
   private slides: (string | undefined)[] = [
-    // 'surf.jpg',
-    // 'mountain.jpg',
-    // 'greece.jpg',
-    // 'snow.jpg',
+    'beach.jpg',
+    'cloud.jpg',
+    'celtic.jpg',
+    'farmer.jpg',
   ]
-
-  async mounted() {
-    try {
-      const listImg = []
-      for(let i = 0; i < 4; i += 1) {
-        const img = await axios.get(`https://picsum.photos/id/2${i}/1200/600`)
-        listImg.push(img.config.url)
-      }
-      this.slides = listImg
-    } catch(e) {
-      console.error(e)
-    }
-  }
 
 }
 </script>
 
 <style lang="sass">
-@import '@/_main.sass'
-
 .home
   color: $stern-brown
   background-color: $sand-yellow

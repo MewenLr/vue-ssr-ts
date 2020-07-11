@@ -9,7 +9,7 @@ function cloneNode(h: CreateElement, vNode: VNode) {
 
     return h(tag, vNode.data, children)
   }
-  return
+  return false
 }
 
 function renderSlides(h: CreateElement, context: Vue): VNode {
@@ -19,7 +19,7 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
   let idx = 0
   const slides = []
   /* slides */
-  for (let i = 0; i < childrenCount; i++) {
+  for (let i = 0; i < childrenCount; i += 1) {
     const child = children ? children[i] : {} as VNode
 
     if (child && child.data) {
@@ -28,7 +28,7 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
       child.data.props = {
         ...(child.data.props || {}),
         isClone: false,
-        index: idx++
+        index: idx += 1,
       }
 
       slides.push(child)
@@ -38,7 +38,7 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
   const before = []
   const after = []
   const slidesCount = slides.length
-  for (let i = 0; i < slidesCount; i++) {
+  for (let i = 0; i < slidesCount; i += 1) {
     const slide = slides[i]
 
     /* before */
@@ -49,7 +49,7 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
       clonedBefore.key = clonedBefore.data.key
       clonedBefore.data.props = {
         index: slideIndex,
-        isClone: true
+        isClone: true,
       }
       before.push(clonedBefore)
     }
@@ -62,7 +62,7 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
       clonedAfter.key = clonedAfter.data.key
       clonedAfter.data.props = {
         index: slideIndex,
-        isClone: true
+        isClone: true,
       }
     }
     after.push(clonedAfter)

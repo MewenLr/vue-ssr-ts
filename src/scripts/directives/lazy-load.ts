@@ -3,7 +3,7 @@ import { DirectiveOptions } from 'vue'
 const directive: DirectiveOptions = {
   bind: (el: HTMLElement, binding) => {
     const picture = Array.from(el.children).find(
-      (element) => /picture$/.test(element.classList.value)
+      (element) => /picture$/.test(element.classList.value),
     ) as HTMLImageElement
 
     if (!picture) {

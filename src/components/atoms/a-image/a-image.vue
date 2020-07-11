@@ -5,11 +5,11 @@
   )
     img.image_placeholder(
       v-if="placeholder"
-      :src="compPlaceholder"
+      :src="compPlaceholder ? placeholder : require(`@/assets/images/${placeholder}`)"
     )
     img.image_picture(
       :alt="alt"
-      :data-url="compSource"
+      :data-url="compSource ? source : require(`@/assets/images/${source}`)"
     )
 </template>
 
@@ -29,11 +29,11 @@ export default class Piction extends Vue {
   @Prop({ default: '' }) private placeholder!: string
 
   get compSource(): boolean {
-    return /^http/.test(this.source) ? this.source : require(`@/assets/images/${this.source}`)
+    return /^http/.test(this.source)
   }
 
   get compPlaceholder(): boolean {
-    return /^http/.test(this.placeholder) ? this.placeholder : require(`@/assets/images/${this.placeholder}`)
+    return /^http/.test(this.placeholder)
   }
 
 }
@@ -42,12 +42,12 @@ export default class Piction extends Vue {
 <style lang="sass">
 .image
   $self: &
-  width: inherit
-  height: inherit
+  width: 100%
+  height: 100%
 
   &_placeholder, &_picture
-    width: inherit
-    height: inherit
+    width: 100%
+    height: 100%
     object-fit: cover
 
   &_placeholder

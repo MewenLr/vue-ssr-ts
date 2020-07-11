@@ -1,5 +1,6 @@
-import { TEventDirective } from '@/scripts/types'
+/* eslint-disable-next-line */
 import { DirectiveBinding } from 'vue/types/options'
+import { TEventDirective } from '@/scripts/types'
 
 export default {
   dragUp: {
@@ -33,6 +34,15 @@ export default {
     unbind: (el: TEventDirective) => {
       el.removeEventListener('mousedown', el.eventFn as EventListener)
       el.removeEventListener('touchstart', el.eventFn as EventListener)
-    }
+    },
+  },
+  resizeCarousel: {
+    bind: (el: TEventDirective, binding: DirectiveBinding) => {
+      el.eventFn = (event) => binding.value(event)
+      window.addEventListener('resize', el.eventFn)
+    },
+    unbind: (el: TEventDirective) => {
+      window.removeEventListener('resize', el.eventFn as EventListener)
+    },
   },
 }

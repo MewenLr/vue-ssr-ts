@@ -15,7 +15,7 @@ import OHeader from '@/components/organisms/o-header/o-header.vue'
 @Component({
   name: 'App',
   components: {
-    OHeader
+    OHeader,
   },
 })
 
@@ -23,6 +23,7 @@ export default class App extends Vue { }
 </script>
 
 <style lang="sass">
+@import '@/_main.sass'
 
 .app
   background-color: $dim-white

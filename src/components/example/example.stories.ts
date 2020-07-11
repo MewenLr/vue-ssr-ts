@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { storiesOf } from '@storybook/vue'
 import ModExample from '@/store/modules/mod-example'
-// import mocks from '@/components/example/example.mocks'
+import mocks from '@/components/example/example.mocks'
 import Example from '@/components/example/example.vue'
 import config from '@/components/example/example.dataset'
 
@@ -14,7 +14,7 @@ storiesOf('Example', module)
   .add('Example', () => ({
     components: { Example },
     data: () => ({
-      msg: props.msg
+      msg: props.msg,
     }),
     store: new Vuex.Store({
       modules: {
@@ -26,8 +26,10 @@ storiesOf('Example', module)
         },
       },
     }),
-    // mocks,
-    template: `<example
-      :msg="msg"
-    />`,
+    mocks,
+    template: `
+      <example
+        :msg="msg"
+      />
+    `,
   }))
