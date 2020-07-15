@@ -19,17 +19,3 @@ import AIcon from '@/components/atoms/a-icon/a-icon.vue'
 
 export default class OHeader extends Vue { }
 </script>
-
-<style lang="sass">
-.header
-  height: 50px
-  display: flex
-  width: inherit
-  justify-content: space-between
-  background-color: $faded-green
-
-  &_btn
-    width: 30px
-    height: 30px
-    padding: 10px
-</style>

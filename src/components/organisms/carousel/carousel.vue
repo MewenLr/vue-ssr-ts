@@ -173,26 +173,3 @@ export default class Carousel extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.carousel
-  width: 100%
-  height: 100%
-  overflow: hidden
-  user-select: none
-  position: relative
-  touch-action: none
-
-  &_slider
-    margin: 0
-    padding: 0
-    width: 100%
-    height: 100%
-    display: flex
-
-  &--pagination
-    padding-bottom: 50px
-
-    .carousel-navigation
-      top: calc(50% - 25px)
-</style>

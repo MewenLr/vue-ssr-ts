@@ -13,7 +13,7 @@
       :key="user.name"
     )
       | Name : {{ user.name }} | Age : {{ user.age }} |&nbsp;
-      span.example_list_method Name and Age : {{ fullName(user) }}
+      span.example_method Name and Age : {{ fullName(user) }}
     .example_comments(
       v-for="comment in comments"
       :key="comment.name"
@@ -98,14 +98,3 @@ export default class Example extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.example
-
-  &_image
-    width: auto
-    height: 150px
-
-  &_comments
-    margin-top: 20px
-</style>

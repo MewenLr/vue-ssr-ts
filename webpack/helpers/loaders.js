@@ -1,7 +1,4 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
-const env = require('./environments')
 const svgoOpts = require('../optimization/svgo')
 
 module.exports = [
@@ -69,55 +66,6 @@ module.exports = [
         options: {
           cacheDirectory: path.resolve(__dirname, '../..', 'node_modules/.cache/babel-loader'),
           cacheIdentifier: '4d286ef4',
-        },
-      },
-    ],
-  },
-
-  /* css-loader */
-  {
-    test: /\.css$/,
-    use: [
-      env.prod && env.client
-        ? { loader: MiniCssExtractPlugin.loader }
-        : { loader: 'vue-style-loader' },
-      {
-        loader: 'css-loader', options: { sourceMap: true },
-      },
-    ],
-  },
-
-  /* sass-loader */
-  {
-    test: /\.s(a|c)ss$/,
-    use: [
-      env.prod && env.client
-        ? { loader: MiniCssExtractPlugin.loader }
-        : { loader: 'vue-style-loader' },
-      {
-        loader: 'css-loader', options: { sourceMap: true },
-      },
-      {
-        loader: 'postcss-loader',
-        options: {
-          sourceMap: true,
-          config: {
-            path: path.resolve(__dirname, 'postcss.config.js'),
-          },
-        },
-      },
-      {
-        loader: 'sass-loader',
-        options: {
-          sourceMap: true,
-          sassOptions: { indentedSyntax: true },
-        },
-      },
-      {
-        loader: 'sass-resources-loader',
-        options: {
-          sourceMap: true,
-          resources: path.resolve(__dirname, '../..', 'src/assets/styles/**/*.sass'),
         },
       },
     ],

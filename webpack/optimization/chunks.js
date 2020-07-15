@@ -1,6 +1,14 @@
 module.exports = {
   cacheGroups: {
 
+    styles: {
+      name: 'styles',
+      test: /\.(css|sass)$/,
+      chunks: 'initial',
+      priority: 10,
+      enforce: true,
+    },
+
     vendors: {
       name: 'vendors',
       test: /[\\/]node_modules[\\/]/,

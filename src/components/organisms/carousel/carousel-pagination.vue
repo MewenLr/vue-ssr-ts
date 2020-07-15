@@ -52,34 +52,3 @@ export default class CarouselPagination extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.carousel-pagination
-  $self: &
-  width: 100%
-  height: 50px
-  z-index: 100
-  display: flex
-  align-items: center
-  justify-content: center
-
-  &_btn
-    padding: 0
-    width: 15px
-    height: 15px
-    margin: 0 5px
-    cursor: pointer
-    border-radius: 100%
-    background-color: transparent
-    border: 1px solid $stern-brown
-
-    &--active
-      background-color: $stern-brown
-
-  &--dash
-
-    #{ $self }_btn
-      width: 25px
-      height: 8px
-      border-radius: 2px
-</style>

@@ -48,7 +48,6 @@ module.exports = {
       plugins: ['vue', '@typescript-eslint'],
       rules: {
         'func-names': 'off',
-        'no-unused-vars': 'off',
         'no-return-await': 'error',
         'semi': ['error', 'never'],
         'class-methods-use-this': 'off',

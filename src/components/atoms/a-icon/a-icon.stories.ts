@@ -1,11 +1,11 @@
 import { storiesOf } from '@storybook/vue'
-import svgIcon from '@/scripts/modules/svg-icon'
+import svgContext from '@/scripts/modules/svg-context'
 import AIcon from '@/components/atoms/a-icon/a-icon.vue'
 import config from '@/components/atoms/a-icon/a-icon.dataset'
 
 const { props } = config
 
-svgIcon()
+svgContext()
 
 storiesOf('Atoms', module).add('AIcon', () => ({
   components: { AIcon },

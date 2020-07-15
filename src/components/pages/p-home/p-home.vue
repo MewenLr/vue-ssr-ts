@@ -1,19 +1,19 @@
 <template lang="pug">
   .home
-    //- example(msg="Example message")
+    example(msg="Example message")
 
-    carousel.home_carousel(
-      pagination="dash"
-      :is-cross="true"
-      v-if="slides.length"
-    )
-      carousel-slide.home_slide(
-        :key="i"
-        v-for="(img, i) in slides"
-      )
-        a-image(
-          :source="img"
-        )
+    //- carousel.home_carousel(
+    //-   pagination="dash"
+    //-   :is-cross="true"
+    //-   v-if="slides.length"
+    //- )
+    //-   carousel-slide.home_slide(
+    //-     :key="i"
+    //-     v-for="(img, i) in slides"
+    //-   )
+    //-     a-image(
+    //-       :source="img"
+    //-     )
 
 </template>
 
@@ -45,13 +45,3 @@ export default class PHome extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.home
-  color: $stern-brown
-  background-color: $sand-yellow
-
-  &_carousel
-    width: 100%
-    height: 500px
-</style>

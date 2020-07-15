@@ -4,11 +4,13 @@ import { sync } from 'vuex-router-sync'
 import App from './app.vue'
 import createStore from './store'
 import createRouter from './router'
-import svgIcon from './scripts/modules/svg-icon'
+import svgContext from './scripts/modules/svg-context'
+import sassContext from './scripts/modules/sass-context'
 
 Vue.use(Meta)
 
-svgIcon()
+svgContext()
+sassContext()
 
 export default () => {
   const router = createRouter()

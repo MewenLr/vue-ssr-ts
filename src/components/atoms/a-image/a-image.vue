@@ -38,28 +38,3 @@ export default class Piction extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.image
-  $self: &
-  width: 100%
-  height: 100%
-
-  &_placeholder, &_picture
-    width: 100%
-    height: 100%
-    object-fit: cover
-
-  &_placeholder
-    z-index: 0
-    position: absolute
-
-  &_picture
-    z-index: 1
-    position: relative
-
-  &--loaded
-
-    #{ $self }_placeholder
-      display: none
-</style>

@@ -23,7 +23,9 @@ server.use(serve(path.resolve(__dirname, '..', 'public')))
 
 router.get('*', async (ctx) => {
   try {
-    const context = { url: ctx.url }
+    const context = {
+      url: ctx.url,
+    }
     const html = await renderer.renderToString(context)
     return ctx.body = html
   } catch (e) {

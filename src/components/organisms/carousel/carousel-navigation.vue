@@ -35,24 +35,3 @@ export default class CarouselNavigation extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.carousel-navigation
-  top: 50%
-  width: 100%
-  z-index: 101
-  display: flex
-  position: absolute
-  transform: translateY(-50%)
-  justify-content: space-between
-
-  &_previous, &_next
-    padding: 0
-    width: 50px
-    height: 50px
-    border: none
-    color: white
-    cursor: pointer
-    font-size: 20px
-    background-color: rgba(black, 0.8)
-</style>

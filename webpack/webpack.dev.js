@@ -31,4 +31,53 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
   ],
 
+  module: {
+    rules: [
+      /* css-loader */
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'vue-style-loader' },
+          {
+            loader: 'css-loader', options: { sourceMap: true },
+          },
+        ],
+      },
+
+      /* sass-loader */
+      {
+        test: /\.s(a|c)ss$/,
+        use: [
+          { loader: 'vue-style-loader' },
+          {
+            loader: 'css-loader', options: { sourceMap: true },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              config: {
+                path: path.resolve(__dirname, 'helpers/postcss.config.js'),
+              },
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sassOptions: { indentedSyntax: true },
+            },
+          },
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              sourceMap: true,
+              resources: path.resolve(__dirname, '..', 'src/assets/styles/**/*.sass'),
+            },
+          },
+        ],
+      },
+    ],
+  },
+
 })

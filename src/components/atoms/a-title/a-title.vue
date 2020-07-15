@@ -24,7 +24,3 @@ export default class ATitle extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.title
-</style>

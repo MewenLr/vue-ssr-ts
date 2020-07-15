@@ -25,13 +25,3 @@ export default class AIcon extends Vue {
 
 }
 </script>
-
-<style lang="sass">
-.icon
-  width: 100%
-  height: 100%
-  overflow: hidden
-
-  &--primary
-    fill: $stern-brown
-</style>

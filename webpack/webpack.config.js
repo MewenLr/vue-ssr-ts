@@ -4,7 +4,6 @@ const WebpackBar = require('webpackbar')
 const HtmlPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 const htmlOpts = require('./plugins/html')
@@ -27,10 +26,6 @@ module.exports = {
     new HtmlPlugin(htmlOpts),
     new SpriteLoaderPlugin(),
     new CaseSensitivePathsPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].bundle.[hash:8].css',
-      chunkFilename: 'css/[name].chunk.[hash:8].css',
-    }),
   ],
 
 }
