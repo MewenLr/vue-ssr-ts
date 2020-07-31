@@ -1,3 +1,8 @@
+@mixin phablet
+  @media (min-width: $phablet)
+    @content
+
+
 @mixin tablet
   @media (min-width: $tablet)
     @content
@@ -10,9 +15,4 @@
 
 @mixin desktop
   @media (min-width: $desktop)
-    @content
-
-
-@mixin widescreen
-  @media (min-width: $widescreen)
     @content

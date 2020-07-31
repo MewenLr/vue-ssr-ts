@@ -1,5 +1,5 @@
 const path = require('path')
-const svgoOpts = require('../optimization/svgo')
+const svgoOpts = require('../webpack/optimization/svgo')
 
 module.exports = [
 
@@ -8,18 +8,7 @@ module.exports = [
     test: /\.vue$/,
     use: [
       {
-        loader: 'cache-loader',
-        options: {
-          cacheDirectory: path.resolve(__dirname, '../..', 'node_modules/.cache/vue-loader'),
-          cacheIdentifier: '735d2f52',
-        },
-      },
-      {
         loader: 'vue-loader',
-        options: {
-          cacheDirectory: path.resolve(__dirname, '../..', 'node_modules/.cache/vue-loader'),
-          cacheIdentifier: '735d2f52',
-        },
       },
     ],
   },
@@ -55,17 +44,55 @@ module.exports = [
     exclude: /(node_modules|bower_components)/,
     use: [
       {
-        loader: 'cache-loader',
+        loader: 'babel-loader',
+      },
+    ],
+  },
+
+  /* css-loader */
+  {
+    test: /\.css$/,
+    use: [
+      {
+        loader: 'vue-style-loader',
+      },
+      {
+        loader: 'css-loader', options: { sourceMap: true },
+      },
+    ],
+  },
+
+  /* sass-loader */
+  {
+    test: /\.s(a|c)ss$/,
+    use: [
+      {
+        loader: 'vue-style-loader',
+      },
+      {
+        loader: 'css-loader', options: { sourceMap: true },
+      },
+      {
+        loader: 'postcss-loader',
         options: {
-          cacheDirectory: path.resolve(__dirname, '../..', 'node_modules/.cache/babel-loader'),
-          cacheIdentifier: '4d286ef4',
+          sourceMap: true,
+          config: {
+            path: path.resolve(__dirname, '..', 'webpack/helpers/postcss.config.js'),
+          },
         },
       },
       {
-        loader: 'babel-loader',
+        loader: 'sass-loader',
         options: {
-          cacheDirectory: path.resolve(__dirname, '../..', 'node_modules/.cache/babel-loader'),
-          cacheIdentifier: '4d286ef4',
+          sourceMap: true,
+          sassOptions: { indentedSyntax: true },
+        },
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          sourceMap: true,
+          resources: path.resolve(__dirname, '..', 'src/assets/styles/**/*.sass'),
         },
       },
     ],
@@ -92,7 +119,7 @@ module.exports = [
   },
   {
     test: /\.svg$/,
-    exclude: path.resolve(__dirname, '../..', 'src/assets/icons'),
+    exclude: path.resolve(__dirname, '..', 'src/assets/icons'),
     use: [
       {
         loader: 'file-loader',
@@ -141,7 +168,7 @@ module.exports = [
   /* svg-icon */
   {
     test: /\.svg$/,
-    include: path.resolve(__dirname, '../..', 'src/assets/icons'),
+    include: path.resolve(__dirname, '..', 'src/assets/icons'),
     use: [
       {
         loader: 'svg-sprite-loader',
@@ -154,6 +181,20 @@ module.exports = [
         options: svgoOpts,
       },
     ],
+  },
+
+  /* stories */
+  {
+    test: /\.stories\.ts?$/,
+    exclude: /node_modules/,
+    use: [
+      {
+        loader: require.resolve('babel-loader')
+      },
+      {
+        loader: require.resolve('@storybook/addon-storysource/loader')
+      }
+    ]
   },
 
 ]
