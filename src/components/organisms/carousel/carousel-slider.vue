@@ -84,7 +84,7 @@ export default class CarouselSlider extends Vue {
 
   public nbSlides = 0
 
-  mounted() {
+  mounted(): void {
     this.$emit('count-slides', this.nbSlides)
   }
 

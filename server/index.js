@@ -21,7 +21,7 @@ const renderer = createBundleRenderer(serverBundle, {
 
 server.use(serve(path.resolve(__dirname, '..', 'public')))
 
-router.get('*', async (ctx) => {
+router.get('(.*)', async (ctx) => {
   try {
     const context = {
       url: ctx.url,

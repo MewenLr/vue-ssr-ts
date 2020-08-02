@@ -69,7 +69,7 @@ export default class Example extends Vue {
   }
 
   // Hooks
-  async mounted() {
+  async mounted(): Promise<void> {
     this.newUser = { name: 'patrick', age: '50' }
     try {
       const { data } = await axGetComments({ params: { postId: 1 } })

@@ -121,7 +121,7 @@ if (env.client) {
       .path(path.resolve(__dirname, '..', 'public'))
       .end()
 
-  config.externals(nodeExternals({ whitelist: [/\.(sa|c)ss$/, /\.vue$/] }))
+  config.externals(nodeExternals({ allowlist: [/\.(sa|c)ss$/, /\.vue$/] }))
 
   config.devtool(false)
 

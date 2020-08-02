@@ -87,7 +87,7 @@ export default class Carousel extends Vue {
     return !!this.nbSlides && this.navigation !== 'none'
   }
 
-  mounted() {
+  mounted(): void {
     this.setSlideSize()
     this.defaultPosition()
     this.paginationPosition = this.nbSlides

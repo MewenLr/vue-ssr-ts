@@ -4,7 +4,7 @@ import PHome from '@/components/pages/p-home/p-home.vue'
 
 Vue.use(Router)
 
-export default () => new Router({
+export default (): Router => new Router({
   mode: 'history',
   routes: [
     {

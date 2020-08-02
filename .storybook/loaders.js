@@ -57,6 +57,9 @@ module.exports = [
         loader: 'vue-style-loader',
       },
       {
+        loader: 'style-loader',
+      },
+      {
         loader: 'css-loader', options: { sourceMap: true },
       },
     ],
@@ -68,6 +71,9 @@ module.exports = [
     use: [
       {
         loader: 'vue-style-loader',
+      },
+      {
+        loader: 'style-loader',
       },
       {
         loader: 'css-loader', options: { sourceMap: true },

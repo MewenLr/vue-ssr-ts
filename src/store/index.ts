@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import ModExample from '@/store/modules/mod-example'
 
 Vue.use(Vuex)
 
-export default () => {
+export default (): Store<object> => {
   const store = new Vuex.Store({
     state: () => ({}),
     getters: {},

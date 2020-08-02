@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import App from './app.vue'
 import createStore from './store'
 import createRouter from './router'
+import { TApp } from './scripts/types'
 import svgContext from './scripts/modules/svg-context'
 import sassContext from './scripts/modules/sass-context'
 
@@ -12,7 +13,7 @@ Vue.use(Meta)
 svgContext()
 sassContext()
 
-export default () => {
+export default (): TApp => {
   const router = createRouter()
   const store = createStore()
 

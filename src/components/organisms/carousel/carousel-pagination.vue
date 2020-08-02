@@ -34,7 +34,7 @@ export default class CarouselPagination extends Vue {
 
   private paginationPosition = 0
 
-  mounted() {
+  mounted(): void {
     this.paginationPosition = this.nbSlides
   }
 

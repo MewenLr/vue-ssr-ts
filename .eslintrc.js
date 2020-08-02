@@ -1,21 +1,21 @@
 module.exports = {
   root: true,
   env: {
-    'node': true,
+    node: true,
   },
   settings: {
     'import/resolver': {
-      'webpack': {
-        'config': './webpack/webpack.config.js',
+      webpack: {
+        config: './webpack/webpack.prod.js',
       },
     },
   },
   parserOptions: {
-    'ecmaVersion': 2020,
+    ecmaVersion: 2020,
   },
   rules: {
-    'semi': ['error', 'never'],
-    'quotes': ['error', 'single'],
+    semi: ['error', 'never'],
+    quotes: ['error', 'single'],
     'no-console': ['warn', { allow: ['info', 'warn', 'error'] }],
   },
   overrides: [
@@ -29,11 +29,11 @@ module.exports = {
       },
       rules: {
         'no-return-assign': 'off',
-        'semi': ['error', 'never'],
+        semi: ['error', 'never'],
         'no-underscore-dangle': 'off',
         'prefer-promise-reject-errors': 'off',
-        'no-param-reassign': ['error', {'props': false }],
-        'import/no-extraneous-dependencies': ['error', { 'devDependencies': true }],
+        'no-param-reassign': ['error', { props: false }],
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
       },
     },
     { /* ts, vue */
@@ -44,21 +44,28 @@ module.exports = {
         'airbnb-base',
         '@vue/typescript/recommended',
       ],
-      parserOptions: { 'parser': '@typescript-eslint/parser' },
+      parserOptions: { parser: '@typescript-eslint/parser' },
       plugins: ['vue', '@typescript-eslint'],
       rules: {
         'func-names': 'off',
         'no-return-await': 'error',
-        'semi': ['error', 'never'],
+        semi: ['error', 'never'],
         'class-methods-use-this': 'off',
-        'max-len': ['error', { 'code': 150 }],
+        'max-len': ['error', { code: 150 }],
         'lines-between-class-members': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],
         '@typescript-eslint/no-inferrable-types': 'off',
-        'no-param-reassign': ['error', {'props': false }],
-        'padded-blocks': ['error', { 'classes': 'always' }],
-        'import/extensions': ['error', { 'ts': 'never', 'vue': 'always' }],
-        'import/no-extraneous-dependencies': ['error', {'devDependencies': true, 'optionalDependencies': true, 'peerDependencies': true }],
+        'no-param-reassign': ['error', { props: false }],
+        'padded-blocks': ['error', { classes: 'always' }],
+        'import/extensions': ['error', { ts: 'never', vue: 'always' }],
+        '@typescript-eslint/ban-types': ['error', {
+          types: {
+            object: false,
+            Function: false,
+          },
+        },
+        ],
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true, optionalDependencies: true, peerDependencies: true }],
       },
     },
     { /* test */
@@ -73,4 +80,4 @@ module.exports = {
       },
     },
   ],
-};
+}
