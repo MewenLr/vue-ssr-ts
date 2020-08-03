@@ -92,6 +92,7 @@ config.module
         fallback: {
           loader: 'file-loader',
           options: {
+            esModule: false,
             name: 'img/[name].[hash:8].[ext]',
           },
         },
@@ -105,9 +106,11 @@ config.module
       .loader('url-loader')
       .options({
         limit: 4096,
+        esModule: false,
         fallback: {
           loader: 'file-loader',
           options: {
+            esModule: false,
             name: 'media/[name].[hash:8].[ext]',
           },
         },
@@ -121,9 +124,11 @@ config.module
       .loader('url-loader')
       .options({
         limit: 4096,
+        esModule: false,
         fallback: {
           loader: 'file-loader',
           options: {
+            esModule: false,
             name: 'fonts/[name].[hash:8].[ext]',
           },
         },
@@ -138,11 +143,8 @@ config.module
     .use('file-loader')
       .loader('file-loader')
       .options({
-        loader: 'file-loader',
-        options: {
-          esModule: false,
-          name: 'img/[name].[hash:8].[ext]',
-        },
+        esModule: false,
+        name: 'img/[name].[hash:8].[ext]',
       })
       .end()
 
