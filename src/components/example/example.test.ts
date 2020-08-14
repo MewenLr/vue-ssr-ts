@@ -25,13 +25,14 @@ describe('[Example]', () => {
           namespaced: true,
           state: ModExample.state,
           actions: ModExample.actions,
-          mutations: ModExample.mutations,
         },
       },
     })
 
+    store.dispatch = jest.fn()
+
     jest.clearAllMocks()
-    mockAxios.get.mockResolvedValue({ data: undefined })
+    mockAxios.get.mockResolvedValue({ data: null })
   })
 
   describe('Props', () => {
@@ -90,11 +91,21 @@ describe('[Example]', () => {
       expect(mockAxios.get).toHaveBeenCalledWith('/comments', { params: { postId: 1 } })
     })
 
-    it('updateUrlExample: should mutate stUrlExample', () => {
+    it('updateUrlExample: should mutate stUrlExample', async () => {
       const updatedUrl = 'https://updated-url.com'
       const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
       wrapper.vm.updateUrlExample(updatedUrl)
-      expect(wrapper.vm.stUrlExample).toEqual(updatedUrl)
+      await wrapper.vm.$nextTick()
+      expect(store.dispatch).toHaveBeenCalledWith(
+        'ModExample/actUrlExample',
+        updatedUrl,
+      )
+    })
+
+    it('emitEvent: should emit event with payload', () => {
+      const wrapper = shallowMount(Example, { propsData, store, localVue }) as any
+      wrapper.vm.emitEvent()
+      expect(wrapper.emitted().testEmit[0]).toEqual(['test emit payload'])
     })
   })
 })

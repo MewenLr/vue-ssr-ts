@@ -9,6 +9,7 @@
   )
     carousel-slider.carousel_slider(
       ref="carouselSlider"
+      :is-infinite="isInfinite"
       @count-slides="countSlides"
     )
       slot
@@ -22,12 +23,14 @@
       :type="pagination"
       :nbSlides="nbSlides"
       :position="position"
+      :is-infinite="isInfinite"
       v-if="hasPagination"
       @select-slide="goTo"
     )
 </template>
 
 <script lang="ts">
+import { wait } from '@/scripts/utils'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import directives from './directives-carousel'
 import CarouselSlider from './carousel-slider.vue'
@@ -44,6 +47,7 @@ const paginationValidator = ['dash', 'dot', 'fraction', 'none']
     CarouselPagination,
     CarouselNavigation,
   },
+  // TODO: outsource directives
   directives: {
     'drag-up': directives.dragUp,
     'drag-move': directives.dragMove,
@@ -61,6 +65,7 @@ export default class Carousel extends Vue {
   }
 
   @Prop({ default: false }) private isCross!: boolean
+  @Prop({ default: false }) private isInfinite!: boolean
   @Prop({
     default: 'dot',
     validator: (prop) => paginationValidator.includes(prop),
@@ -76,8 +81,7 @@ export default class Carousel extends Vue {
   private dragOn = false
   private animationOn = false
   private animationDelay = 300
-  private paginationPosition = 0
-  private startPoint: number | undefined = undefined
+  private startPoint: number | null = null
 
   get hasPagination(): boolean {
     return !!this.nbSlides && this.pagination !== 'none'
@@ -87,10 +91,25 @@ export default class Carousel extends Vue {
     return !!this.nbSlides && this.navigation !== 'none'
   }
 
+  get compIsFirstIndex(): boolean {
+    return this.position === 0
+  }
+
+  get compIsLastIndex(): boolean {
+    return this.position === this.nbSlides - 1
+  }
+
+  get compGoNext(): boolean {
+    return this.delta >= 10 && Math.round(this.delta / 100) < 2
+  }
+
+  get compGoPrevious(): boolean {
+    return this.delta <= -10 && Math.round(this.delta / 100) > -2
+  }
+
   mounted(): void {
     this.setSlideSize()
     this.defaultPosition()
-    this.paginationPosition = this.nbSlides
   }
 
   public setSlideSize(): void {
@@ -106,7 +125,8 @@ export default class Carousel extends Vue {
   }
 
   public defaultPosition(): void {
-    this.position = this.nbSlides
+    if (this.isInfinite) this.position = this.nbSlides
+    else this.position = 0
     this.moveSlider(false)
   }
 
@@ -116,23 +136,22 @@ export default class Carousel extends Vue {
     el.style.transform = `translateX(-${this.position * (this.isCross ? 85 : 100)}%)`
   }
 
-  public animateSlider(): void {
+  public async animateSlider(): Promise<void> {
     this.animationOn = true
     const el = this.$refs.carouselSlider.$el as HTMLElement
     el.style.transition = `transform ease-in ${this.animationDelay}ms`
-    setTimeout(() => {
-      this.animationOn = false
-      el.style.transition = ''
-      if (this.position >= (this.nbSlides * 2) || this.position <= 0) this.defaultPosition()
-    }, this.animationDelay)
+    await wait(this.animationDelay)
+    this.animationOn = false
+    el.style.transition = ''
+    if (this.position >= (this.nbSlides * 2) || this.position <= 0) this.defaultPosition()
   }
 
-  public goTo(index: number, event: MouseEvent | TouchEvent): void {
+  public goTo(index: number | string, event: MouseEvent | TouchEvent): void {
     event.preventDefault()
     if (!this.animationOn) {
-      if (index === 1) this.position += 1
-      else if (index === -1) this.position -= 1
-      else this.position = index
+      if (index === 'next') this.position += 1
+      else if (index === 'previous') this.position -= 1
+      else if (typeof index !== 'string') this.position = index
       this.moveSlider()
       this.$refs.carouselPagination.movePagination()
     }
@@ -140,7 +159,7 @@ export default class Carousel extends Vue {
 
   public startDrag(event: MouseEvent | TouchEvent): void {
     event.preventDefault()
-    if (!this.animationOn) {
+    if (!this.dragOn && !this.animationOn) {
       this.dragOn = true
       this.startPoint = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
     }
@@ -152,22 +171,41 @@ export default class Carousel extends Vue {
       const clientx = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
       this.delta = ((clientx - this.startPoint) / this.$refs.carousel.offsetWidth) * 100 * -1
       const el = this.$refs.carouselSlider.$el as HTMLElement
-      el.style.transform = `translateX(-${this.delta + (this.position * (this.isCross ? 85 : 100))}%)`
+      const translate = (this.delta + this.position * (this.isCross ? 85 : 100)) * -1
+      el.style.transform = `translateX(${translate}%)`
     }
   }
 
   public stopDrag(event: MouseEvent | TouchEvent): void {
+    // TODO: recheck normal slider && infinite slider && navigation && pagination
     if (this.dragOn) {
       const roundDelta = Math.round(this.delta / 100)
       const btwZeroAndTen = (this.delta > -10 && this.delta < 0) || (this.delta > 0 && this.delta < 10)
-      if (this.delta === 0) this.goTo(1, event)
+
+      if (
+        (!this.isInfinite && this.compIsFirstIndex && this.compGoPrevious)
+        || (!this.isInfinite && this.compIsLastIndex && this.compGoNext)
+      ) this.goTo(this.position, event)
+      else if (this.delta === 0) this.goTo('next', event)
       else if (btwZeroAndTen) this.goTo(this.position, event)
-      else if (this.delta >= 10 && roundDelta < 2) this.goTo(1, event)
-      else if (this.delta <= -10 && roundDelta > -2) this.goTo(-1, event)
-      else this.goTo(roundDelta + this.position, event)
+      else if (this.compGoNext) this.goTo('next', event)
+      else if (this.compGoPrevious) this.goTo('previous', event)
+      else this.goTo(roundDelta + this.position, event) // go next / previous position
+
+      // if (this.delta === 0) this.goTo('next', event)
+      // else if (btwZeroAndTen) this.goTo(this.position, event)
+      // else if (this.delta >= 10 && roundDelta < 2) this.goTo('next', event)
+      // else if (this.delta <= -10 && roundDelta > -2) this.goTo('previous', event)
+      // else {
+      //   console.log('position ', this.position)
+      //   console.log('roundDelta ', roundDelta)
+      //   console.log('goTo ', roundDelta + this.position)
+      //   this.goTo(roundDelta + this.position, event) // go next / previous position
+      // }
+
       this.delta = 0
       this.dragOn = false
-      this.startPoint = undefined
+      this.startPoint = null
     }
   }
 

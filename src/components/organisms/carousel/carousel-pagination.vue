@@ -7,11 +7,11 @@
     ) {{ paginationPosition - nbSlides + 1 }} / {{ nbSlides }}
     button.carousel-pagination_btn(
       :aria-label="`Slide ${n}`"
-      :class="{'carousel-pagination_btn--active': (n - 1) === (paginationPosition - nbSlides)}"
+      :class="{ 'carousel-pagination_btn--active': (n - 1) === compPaginationPosition }"
       v-else
       v-for="n in nbSlides"
-      v-click-down="selectSlide.bind(null, n + nbSlides - 1)"
-      @keydown.enter="selectSlide(n + nbSlides - 1, $event)"
+      v-click-down="selectSlide.bind(null, n + compBaseIndex)"
+      @keydown.enter="selectSlide(n + compBaseIndex, $event)"
     )
 </template>
 
@@ -31,11 +31,20 @@ export default class CarouselPagination extends Vue {
   @Prop({ required: true }) private type!: string
   @Prop({ required: true }) private nbSlides!: number
   @Prop({ required: true }) private position!: number
+  @Prop({ required: true }) public isInfinite!: boolean
 
   private paginationPosition = 0
 
+  get compBaseIndex(): number {
+    return this.isInfinite ? (this.nbSlides - 1) : -1
+  }
+
+  get compPaginationPosition(): number {
+    return this.isInfinite ? (this.paginationPosition - this.nbSlides) : this.paginationPosition
+  }
+
   mounted(): void {
-    this.paginationPosition = this.nbSlides
+    if (this.isInfinite) this.paginationPosition = this.nbSlides
   }
 
   public selectSlide(pageSelected: number, event: MouseEvent | TouchEvent): void {
@@ -44,9 +53,15 @@ export default class CarouselPagination extends Vue {
 
   public movePagination(): void {
     this.$nextTick(() => {
-      if (this.position >= (this.nbSlides * 2) || this.position === 0) this.paginationPosition = this.nbSlides
-      else if (this.position < this.nbSlides) this.paginationPosition = this.position + this.nbSlides
-      else this.paginationPosition = this.position
+      if (this.position >= (this.nbSlides * 2) || this.position === 0) {
+        if (this.isInfinite) this.paginationPosition = this.nbSlides
+        else this.paginationPosition = 0
+      } else if (this.position < this.nbSlides) {
+        if (this.isInfinite) this.paginationPosition = this.position + this.nbSlides
+        else this.paginationPosition = this.position
+      } else {
+        this.paginationPosition = this.position
+      }
     })
   }
 

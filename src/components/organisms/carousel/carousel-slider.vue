@@ -1,6 +1,6 @@
 <script lang="ts">
 import { CreateElement, VNode } from 'vue'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 function cloneNode(h: CreateElement, vNode: VNode) {
   if (vNode.componentOptions) {
@@ -37,35 +37,38 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
 
   const before = []
   const after = []
-  const slidesCount = slides.length
-  for (let i = 0; i < slidesCount; i += 1) {
-    const slide = slides[i]
+  if ((context as CarouselSlider).isInfinite) {
 
-    /* before */
-    const clonedBefore = cloneNode(h, slide)
-    let slideIndex = i - slidesCount
-    if (clonedBefore && clonedBefore.data) {
-      clonedBefore.data.key = `before_${i}`
-      clonedBefore.key = clonedBefore.data.key
-      clonedBefore.data.props = {
-        index: slideIndex,
-        isClone: true,
-      }
-      before.push(clonedBefore)
-    }
+    const slidesCount = slides.length
+    for (let i = 0; i < slidesCount; i += 1) {
+      const slide = slides[i]
 
-    /* after */
-    const clonedAfter = cloneNode(h, slide)
-    slideIndex = i + slidesCount
-    if (clonedAfter && clonedAfter.data) {
-      clonedAfter.data.key = `after_${slideIndex}`
-      clonedAfter.key = clonedAfter.data.key
-      clonedAfter.data.props = {
-        index: slideIndex,
-        isClone: true,
+      /* before */
+      const clonedBefore = cloneNode(h, slide)
+      let slideIndex = i - slidesCount
+      if (clonedBefore && clonedBefore.data) {
+        clonedBefore.data.key = `before_${i}`
+        clonedBefore.key = clonedBefore.data.key
+        clonedBefore.data.props = {
+          index: slideIndex,
+          isClone: true,
+        }
+        before.push(clonedBefore)
       }
+
+      /* after */
+      const clonedAfter = cloneNode(h, slide)
+      slideIndex = i + slidesCount
+      if (clonedAfter && clonedAfter.data) {
+        clonedAfter.data.key = `after_${slideIndex}`
+        clonedAfter.key = clonedAfter.data.key
+        clonedAfter.data.props = {
+          index: slideIndex,
+          isClone: true,
+        }
+      }
+      after.push(clonedAfter)
     }
-    after.push(clonedAfter)
   }
 
   (context as CarouselSlider).nbSlides = slides.length
@@ -83,6 +86,8 @@ function renderSlides(h: CreateElement, context: Vue): VNode {
 export default class CarouselSlider extends Vue {
 
   public nbSlides = 0
+
+  @Prop({ required: true }) public isInfinite!: boolean
 
   mounted(): void {
     this.$emit('count-slides', this.nbSlides)

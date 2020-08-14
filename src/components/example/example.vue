@@ -96,5 +96,9 @@ export default class Example extends Vue {
     this.actUrlExample(updatedUrl)
   }
 
+  public emitEvent(): void {
+    this.$emit('testEmit', 'test emit payload')
+  }
+
 }
 </script>
